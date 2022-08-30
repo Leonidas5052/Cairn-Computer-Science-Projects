@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<TITLE>CIS231 HTML Demonstration</TITLE>
+<META charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<META name="Author" content="Ethan Kang" />
+<META name="Date" content="Jan 13, 2022" />
+<META name="Description" content="A text adventure game taking place in a building." />
+<SCRIPT type="text/javascript">
+var transfer;
+var room0 = {
+	Number: 0,
+	Items: 'nothing',
+	Actions: ['MOVE NORTH','LOOK AROUND', 'MOVE WEST', 'MOVE EAST', 'GRAB ITEM','CHECK'],
+	Start_Dialouge: 'You wake up in a forest.  You can hear a river to the West from where you are and you can see the forest start to thin to the east.  North of you is a huge mountain to climb.  Maybe if you move to a different side of it, you can climb up it.',
+	Dialouge : 'There is a River to the West, and a clearing that you can see to the East.  A Mountain that you cannot climb yet is to the North.'
+}
+var room1 = {
+	Number : 1,
+	Items : ['Water'],
+	Actions : ['MOVE EAST', 'MOVE NORTH', 'LOOK AROUND', 'GRAB ITEM','CHECK'],
+	Dialouge : 'There is a wide River.  It is too wide to cross currently.  You can move to the start location to the East, or move North to try to move around the Mountain.'
+}
+var room2 = {
+	Number : 2,
+	Items : ['Stick','Stick','Rock','Rock','Rock'],
+	Actions : ['MOVE WEST','MOVE NORTH','LOOK AROUND','GRAB ITEM','CHECK'],
+	Dialouge : 'There is a nice clearing that has some items that seem to be there from a recent storm.  To the North there might be a way to go up the mountain.  To the West is where you started.'
+
+}
+var room3 = {
+	Number : 3,
+	Items : ['Water'],
+	Actions : ['MOVE EAST', 'MOVE SOUTH', 'LOOK AROUND', 'GRAB ITEM','CHECK'],
+	Dialouge : 'The River is really wide here.  You can go to the South towards where you arrived from the start point.  Or you can go East towards the Mountain to climb up it.'
+}
+var room4 = {
+	Number : 4,
+	Items : ['Stick','Stick','Stick','Rock','Rock','Rock','Log'],
+	Actions : ['MOVE WEST', 'MOVE SOUTH', 'LOOK AROUND', 'GRAB ITEM','CHECK'],
+	Dialouge : 'It is evident that a violent storm recently passed through here.  There is more damage to the forest here.  You can either go South to the clearing near the start point, or you can go West to try and go up the mountain'
+}
+var room5 = {
+	Number : 5,
+	Items : ['Starred Ball'],
+	Actions : ['MOVE WEST', 'MOVE SOUTH','MOVE EAST', 'LOOK AROUND', 'GRAB ITEM','CHECK'],
+	Dialouge : 'At the top of the mountain, you can see the River and the Clearing.  You can go East back to where the damaged forest was, or West to where the River lied, or you can go down the Mountain South.'
+}
+var Player = {
+	Room: 0,
+	Inventory:[],
+	Health : 20,
+	Ki : 0,
+	Previous_Room: 0,
+		
+
+}
+function main(){
+	var html = "Room: "+Player.Room+ "<BR />"+
+		"Inventory count: " + Player.Inventory.length+ "<BR />" +
+		"Player Health: " + Player.Health + "<BR />";
+	document.getElementById("startText").innerHTML = html;
+	
+}
+function action(){
+	var inputBox = document.getElementById('textBox');
+	var resultsBox = document.getElementById('results');
+	
+	if(Player.Room == 0){
+	let command = inputBox.value.toUpperCase()
+		if (room0.Actions.indexOf(command) == -1){
+			if (command == 'HELP'){
+				
+				resultsBox.innerHTML = 'The list of commands you have access to are ' + room0.Actions;
+			}
+			else {
+				
+				resultsBox.innerHTML = 'that is not an action that you can run, enter a valid action';
+			}
+		} else {
+			if (command == "LOOK AROUND"){;
+				resultsBox.innerHTML = room0.Dialouge;
+			} else if (command == 'GRAB ITEM'){
+				if (room0.Items == 'nothing'){
+					resultsBox.innerHTML = "There are no Items to grab.";
+				} else {
+					transfer = room0.Items.length;
+					
+					for (let i = 0; i < transfer; i++){
+						Player.Inventory.push(room.Items.pop);
+						
+					} 
+					resultsBox.innerHTML = "Items have been moved to your Inventory.";
+				}
+			} else if (command == 'MOVE WEST'){
+				Player.Room = 1;
+				resultsBox.innerHTML = room1.Dialouge;
+			} else if (command == 'MOVE EAST'){
+				Player.Room = 2;
+				resultsBox.innerHTML = room2.Dialouge;
+				
+			} else if (command == 'MOVE NORTH'){
+				resultsBox.innerHTML = 'You cannot do that yet'
+			}
+			else{
+				console.log('Help');
+			}
+			
+		}
+	} else if (Player.Room == 1){
+		let command = inputBox.value.toUpperCase()
+		if (room1.Actions.indexOf(command) == -1){
+			if (command == 'HELP'){
+				
+				resultsBox.innerHTML = 'The list of commands you have access to are ' + room1.Actions;
+			}
+			else {
+				
+				resultsBox.innerHTML = 'that is not an action that you can run, enter a valid action';
+			}
+		} else {
+			if (command == "LOOK AROUND"){;
+				resultsBox.innerHTML = room1.Dialouge;
+			} else if (command == 'GRAB ITEM'){
+				if (room1.Items == 'nothing' || room1.Items.length == 0){
+					resultsBox.innerHTML = "There are no Items to grab.";
+				} else {
+					transfer = room1.Items.length;
+					let list = Player.Inventory;
+					for (let i = 0; i < transfer; i++){
+						let j = room1.Items.pop()
+						Player.Inventory.push(j);
+						
+					} 
+					resultsBox.innerHTML = "Items have been moved to your Inventory.";
+				}
+			 
+			} else if (command == 'MOVE EAST'){
+				Player.Room = 0;
+				resultsBox.innerHTML = room0.Dialouge;
+				console.log('it happened');
+			} else if (command == 'MOVE NORTH'){
+				Player.Room = 3;
+				resultsBox.innerHTML = room3.Dialouge;
+				
+			}
+			else{
+				
+			}
+			
+		}
+	
+	}else if (Player.Room == 2){
+		let command = inputBox.value.toUpperCase()
+		if (room2.Actions.indexOf(command) == -1){
+			if (command == 'HELP'){
+				
+				resultsBox.innerHTML = 'The list of commands you have access to are ' + room2.Actions;
+			}
+			else {
+				
+				resultsBox.innerHTML = 'that is not an action that you can run, enter a valid action';
+			}
+		} else {
+			if (command == "LOOK AROUND"){;
+				resultsBox.innerHTML = room2.Dialouge;
+			} else if (command == 'GRAB ITEM'){
+				if (room2.Items == 'nothing' || room2.Items.length == 0){
+					resultsBox.innerHTML = "There are no Items to grab.";
+				} else {
+					let transfer = room2.Items.length;
+					for (let i = 0; i < transfer; i++){
+						let j = room2.Items.pop()
+						Player.Inventory.push(j);
+						console.log(Player.Inventory);
+					} 
+					resultsBox.innerHTML = "Items have been moved to your Inventory.";
+					console.log(Player.Inventory);
+				}
+			} else if (command == 'MOVE WEST'){
+				Player.Room = 0;
+				resultsBox.innerHTML = room0.Dialouge;
+			
+			} else if (command == 'MOVE NORTH'){
+				Player.Room = 4;
+				resultsBox.innerHTML = room4.Dialouge
+			}
+			else{
+				console.log('Help');
+			}
+			
+		}
+	}else if (Player.Room == 3){
+		let command = inputBox.value.toUpperCase()
+		if (room3.Actions.indexOf(command) == -1){
+			if (command == 'HELP'){
+				
+				resultsBox.innerHTML = 'The list of commands you have access to are ' + room3.Actions;
+			}
+			else {
+				
+				resultsBox.innerHTML = 'that is not an action that you can run, enter a valid action';
+			}
+		} else {
+			if (command == "LOOK AROUND"){;
+				resultsBox.innerHTML = room3.Dialouge;
+			} else if (command == 'GRAB ITEM'){
+				if (room3.Items == 'nothing' || room3.Items.length == 0){
+					resultsBox.innerHTML = "There are no Items to grab.";
+				} else {
+					let transfer = room3.Items.length;
+					for (let i = 0; i < transfer; i++){
+						let j = room3.Items.pop()
+						Player.Inventory.push(j);
+						
+					} 
+					resultsBox.innerHTML = "Items have been moved to your Inventory.";
+					console.log(Player.Inventory);
+				}
+			} else if (command == 'MOVE EAST'){
+				Player.Room = 5;
+				resultsBox.innerHTML = room5.Dialouge;
+			
+			} else if (command == 'MOVE SOUTH'){
+				Player.Room = 1
+				resultsBox.innerHTML = room4.Dialouge;
+			}
+			else{
+				console.log('Help');
+			}
+			
+		}
+	}else if (Player.Room == 4){
+		let command = inputBox.value.toUpperCase()
+		if (room4.Actions.indexOf(command) == -1){
+			if (command == 'HELP'){
+				
+				resultsBox.innerHTML = 'The list of commands you have access to are ' + room4.Actions;
+			}
+			else {
+				
+				resultsBox.innerHTML = 'that is not an action that you can run, enter a valid action';
+			}
+		} else {
+			if (command == "LOOK AROUND"){;
+				resultsBox.innerHTML = room4.Dialouge;
+			} else if (command == 'GRAB ITEM'){
+				if (room4.Items == 'nothing' || room4.Items.length == 0){
+					resultsBox.innerHTML = "There are no Items to grab.";
+				} else {
+					let transfer = room4.Items.length;
+					for (let i = 0; i < transfer; i++){
+						let j = room4.Items.pop()
+						Player.Inventory.push(j);
+						
+					} 
+					resultsBox.innerHTML = "Items have been moved to your Inventory.";
+					console.log(Player.Inventory);
+				}
+			} else if (command == 'MOVE WEST'){
+				Player.Room = 5;
+				resultsBox.innerHTML = room5.Dialouge;
+			
+			} else if (command == 'MOVE SOUTH'){
+				Player.Room = 2;
+				resultsBox.innerHTML = room2.Dialouge;
+			}
+			else{
+				console.log('Help');
+			}
+			
+		}
+	}else if (Player.Room == 5){
+		let command = inputBox.value.toUpperCase()
+		if (room5.Actions.indexOf(command) == -1){
+			if (command == 'HELP'){
+				
+				resultsBox.innerHTML = 'The list of commands you have access to are ' + room5.Actions;
+			}
+			else {
+				
+				resultsBox.innerHTML = 'that is not an action that you can run, enter a valid action';
+			}
+		} else {
+			if (command == "LOOK AROUND"){;
+				resultsBox.innerHTML = room5.Dialouge;
+			} else if (command == 'GRAB ITEM'){
+				if (room5.Items == 'nothing' || room5.Items.length == 0){
+					resultsBox.innerHTML = "There are no Items to grab.";
+				} else {
+					let transfer = room5.Items.length;
+					for (let i = 0; i < transfer; i++){
+						let j = room5.Items.pop()
+						Player.Inventory.push(j);
+						
+					} 
+					resultsBox.innerHTML = "Items have been moved to your Inventory.";
+					
+				}
+			} else if (command == 'MOVE WEST'){
+				Player.Room = 3;
+				resultsBox.innerHTML = room3.Dialouge;
+			
+			} else if (command == 'MOVE South'){
+				resultsBox.innerHTML = room0.Dialouge
+				Player.Room = 0;
+				
+			}else if (command == 'MOVE EAST'){
+				Player.Room = 4;
+				resultsBox.innerHTML = room4.Dialouge;
+			}
+			else{
+				console.log('Help');
+			}
+			
+		}
+	}
+}
+function move(){
+
+}
+function enterRoom(){
+
+}
+function grabItem(){
+
+}
+</SCRIPT>
+</HEAD>
+<BODY onLoad = "main();">
+
+<INPUT type = "text" id = "textBox"></INPUT>
+<BUTTON id = 'button' onCLick = 'action();main();'>Click to Perform Action</BUTTON>
+<DIV id="startText"></DIV>
+<DIV id="results">You wake up in a forest.  You can hear a river to the West from where you are and you can see the forest start to thin to the east.  North of you is a huge mountain to climb.  Maybe if you move to a different side of it, you can climb up it.</DIV>
+
+</BODY>
+</HTML>

@@ -1,0 +1,895 @@
+<!DOCTYPE HTML>
+<HTML>
+<HEAD>
+<TITLE>CIS231 Battleship Project</TITLE>
+<META charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<META name="Author" content="Prof. Sabal" />
+<META name="Date" content="Jan 13, 2022" />
+<META name="Description" content="A demonstration of how to use HTML tags" />
+<SCRIPT type="text/javascript">
+var computerBoard = [];
+var playerBoard = [[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0]];
+var choices = ['A0','A1','A2','A3','A4','A5','A6','A7','A8','A9','B0','B1','B2','B3','B4','B5','B6','B7','B8','B9','C0','C1','C2','C3','C4','C5','C6','C7','C8','C9','D0','D1','D2','D3','D4','D5','D6','D7','D8','D9','E0','E1','E2','E3','E4','E5','E6','E7','E8','E9','F1','F2','F3','F4','F5','F6','F7','F8','F9','G0','G1','G2','G3','G4','G5','G6','G7','G8','G9','H0','H1','H2','H3','H4','H5','H6','H7','H8','H9','I1','I2','I3','I4','I5','I6','I7','I8','I9','J0','J1','J2','J3','J4','J5','J6','J7','J8','J9'];
+
+var board;
+var setup = 'true';//change to false when testing final build
+var playerCount = 0;
+var computerCount = 0;
+var computerCarrier = {location: [], size: 5, hits: 0}
+var computerBattleship = {location: [], size: 4, hits: 0}
+var computerCruiser = {location: [], size: 3, hits: 0}
+var computerSubmarine = {location: [], size: 3, hits: 0}
+var computerDestroyer = {location: [], size: 2, hits: 0}
+var playerCarrier = {location: [], size: 5, hits: 0}
+var playerBattleship = {location: [], size: 4, hits: 0}
+var playerCruiser = {location: [], size: 3, hits: 0}
+var playerSubmarine = {location: [], size: 3, hits: 0}
+var playerDestroyer = {location: [], size: 2, hits: 0}
+
+
+function main(){
+	placeComputerShips('static');
+	
+	createBoard(10);
+	setup = 'true';
+	//playGame();
+}//Main Function which tells which makes the functions run
+function placeComputerShips(Style){
+	if (Style == 'static'){
+		computerBoard = [
+		[1,1,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,1],
+		[0,0,0,0,0,0,0,0,0,1],
+		[0,0,0,0,0,0,0,0,0,1],
+		[0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,1,1,1,1,1],
+		[1,0,0,0,0,0,0,0,0,0],
+		[1,0,0,0,0,0,0,0,0,0],
+		[1,0,1,1,1,0,0,0,0,0],
+		[1,0,0,0,0,0,0,0,0,0]]
+	}
+	else {
+		
+	
+	
+	}
+}
+function placePlayerShips(){
+	playerBoard = [
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0,0,0]];
+
+}
+function actions(){
+	
+		placement = document.getElementById('box1').value;
+		attack(placement);
+	
+}
+function attack(square){
+	var location = square.split('',3);
+	if (isNaN(location[1])){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}else {
+		location[0] = location[0].toUpperCase();
+		if(location[0] == 'A'){
+			location[0] = 0;
+		} else if (location[0] == 'B'){
+			location[0] = 1;
+		}else if (location[0] == 'C'){
+			location[0] = 2;
+		}else if (location[0] == 'D'){
+			location[0] = 3;
+		}else if (location[0] == 'E'){
+			location[0] = 4;
+		}else if (location[0] == 'F'){
+			location[0] = 5;
+		}else if (location[0] == 'G'){
+			location[0] = 6;
+		}else if (location[0] == 'H'){
+			location[0] = 7;
+		}else if (location[0] == 'I'){
+			location[0] = 8;
+		}else if (location[0] == 'J'){
+			location[0] = 9;
+		}else{
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;			
+		}
+	}
+	if (location.length == 3 && Number(location[2] == 0) && Number(location[1]) == 1){
+		location.pop()
+		location[1]=10;
+	}else if (location.length == 3 && location[2] != 0 || location[1] == 0){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}
+	let row = location[0];
+	let col = Number(location[1])-1;
+	
+	if (computerBoard[row][col] == 1){
+		computerBoard[row][col] = 2;
+		playerCount++;
+		document.getElementById('result').innerHTML = 'Hit'
+		
+	}else if (computerBoard[row][col] == 2 || computerBoard[row][col]){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}
+	else {
+		computerBoard[row][col] = 3;
+		document.getElementById('result').innerHTML = 'Miss'
+
+	}
+	computerAction();
+	displayBoard();
+	console.log(playerCount);
+	console.log(computerCount);
+	
+}
+function computerAction(){
+	var index = Math.floor(Math.random()*(choices.length));
+	let compLoca = choices.splice(index,1);
+	console.log(00);
+	console.log(compLoca);
+	compLoca = compLoca[0].split('',2);
+	if(compLoca[0] == 'A'){
+			compLoca[0] = 0;
+		} else if (compLoca[0] == 'B'){
+			compLoca[0] = 1;
+		}else if (compLoca[0] == 'C'){
+			compLoca[0] = 2;
+		}else if (compLoca[0] == 'D'){
+			compLoca[0] = 3;
+		}else if (compLoca[0] == 'E'){
+			compLoca[0] = 4;
+		}else if (compLoca[0] == 'F'){
+			compLoca[0] = 5;
+		}else if (compLoca[0] == 'G'){
+			compLoca[0] = 6;
+		}else if (compLoca[0] == 'H'){
+			compLoca[0] = 7;
+		}else if (compLoca[0] == 'I'){
+			compLoca[0] = 8;
+		}else if (compLoca[0] == 'J'){
+			compLoca[0] = 9;
+		}
+	x = compLoca[0];
+	y = compLoca[1];
+	if (board[x][y] == 1){
+		board[x][y] = 2;
+	}
+	else {
+		board[x][y] = 3;
+	}
+}
+function createBoard(boardSize){
+	board = playerBoard;
+	//for (let row = 0; row<boardSize; row++){
+	//	rowData = [];
+	//	for(let col = 0; col<boardSize; col++){
+	//		rowData.push((Math.floor(Math.random()*4))?'false':'true');
+	//		
+	//	}
+	//	board.push(rowData);
+
+	//}
+	displayBoard();
+	
+
+}//creates a board
+// displays the current board
+
+function displayBoard() {
+	
+	var html = "<TABLE border=1>";
+	for (let row = 0; row<board.length; row ++){
+		html += "<TR>";
+		for (let col = 0; col<board[row].length; col++){
+			let cell = "<TD id=\"";
+			cell += "R"+row+"C"+col;
+			if (board[row][col] == '1'){
+				color = 'gray';
+			} else if (board[row][col]=='2'){
+				color = 'red';
+			}else if (board[row][col]=='3'){
+				color = 'white';
+			}
+			else {
+				color = 'blue';
+			}
+			
+			
+		
+			cell += "\" style = \"background-color:" + color;
+			
+			cell += ";\">" + "&nbsp&nbsp&nbsp&nbsp;";
+			cell += "</TD>";
+			html += cell;
+
+		}// column loop
+		html += "</TR>";
+	} // row loop
+	html += "</TABLE>";
+	document.getElementById("results").innerHTML = html;
+	var sec2 = "<TABLE border=1>";
+	for (let row = 0; row<computerBoard.length; row ++){
+		sec2 += "<TR>";
+		for (let col = 0; col<computerBoard[row].length; col++){
+			let cell = "<TD id=\"";
+			cell += "R"+row+"C"+col;
+			if (computerBoard[row][col]=='2'){
+				color = 'red';
+			}else if (computerBoard[row][col]=='3'){
+				color = 'white';
+			}
+			else {
+				color = 'blue';
+			}
+			
+			
+		
+			cell += "\" style = \"background-color:" + color;
+			
+			cell += ";\">" + "&nbsp&nbsp&nbsp&nbsp;";
+			cell += "</TD>";
+			sec2 += cell;
+
+		}// column loop
+		sec2 += "</TR>";
+	} // row loop
+	sec2 += "</TABLE>";
+	document.getElementById("area").innerHTML=sec2;
+}
+//Gets ship locations
+function getCarrierLocation(){
+	let select = document.getElementById('carrierDirection');
+	let important = select.options[select.selectedIndex].value;
+	let actualImportant = document.getElementById('carrierLocation').value;
+	let frank = actualImportant.split('',3);
+	if (isNaN(frank[1])){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}
+	let checker = playerCarrier.location;
+	if(checker.length != 0){
+		for(let i = 0; i<5;i++){
+			let c = checker[i][0];
+			let d = checker[i][1];
+			playerBoard[c][d] = 0;
+		}
+		playerCarrier.location = [];
+		checker = [];
+	}
+	frank[0] = frank[0].toUpperCase();
+	if(frank[0] == 'A'){
+			frank[0] = 0;
+		} else if (frank[0] == 'B'){
+			frank[0] = 1;
+		}else if (frank[0] == 'C'){
+			frank[0] = 2;
+		}else if (frank[0] == 'D'){
+			frank[0] = 3;
+		}else if (frank[0] == 'E'){
+			frank[0] = 4;
+		}else if (frank[0] == 'F'){
+			frank[0] = 5;
+		}else if (frank[0] == 'G'){
+			frank[0] = 6;
+		}else if (frank[0] == 'H'){
+			frank[0] = 7;
+		}else if (frank[0] == 'I'){
+			frank[0] = 8;
+		}else if (frank[0] == 'J'){
+			frank[0] = 9;
+		}else{
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;			
+		}
+		
+	if (frank.length == 3 && Number(frank[2]) == 0 && Number(frank[1]) == 1){
+		frank.pop()
+		frank[1]=10;
+	}else if (frank.length == 3  || frank[1] == 0){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+		console.log('hi');
+	}
+	frank[1] = Number(frank[1])-1;
+	
+	let x = frank[0];
+	let y = frank[1];
+	if(important == 'vertical'){
+		
+		if(x >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else{
+			if(playerCruiser.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<4;p++){
+						if(playerCruiser.location[o][0]==[x+p] && playerCruiser.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<4;p++){
+						if(playerCarrier.location[o][0]==[x+p] && playerCarrier.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerSubmarine.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<4;p++){
+						if(playerSubmarine.location[o][0]==[x+p] && playerSubmarine.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			playerCarrier.direction = 'vertical';
+			for (let i = 0; i < 5; i++){
+				playerBoard[x+i][y] = 1;
+				playerCarrier.location.push([x+i,y]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+
+		}
+	} else if(important == 'horizontal'){
+		if(y >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else {
+			playerCarrier.direction = 'horizontal';
+
+			for (let i = 0; i<5;i++){
+				playerBoard[x][y+i] = 1;
+				playerCarrier.location.push([x,y+i]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+		}
+		
+	}
+	
+	displayBoard();
+	
+}
+function getBattleshipLocation(){
+	let select = document.getElementById('battleshipDirection');
+	let important = select.options[select.selectedIndex].value;
+	let actualImportant = document.getElementById('battleshipLocation').value;
+	let frank = actualImportant.split('',3);
+	if (isNaN(frank[1])){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}
+	let checker = playerBattleship.location;
+	if(checker.length != 0){
+		for(let i = 0; i<4;i++){
+			let c = checker[i][0];
+			let d = checker[i][1];
+			playerBoard[c][d] = 0;
+		}
+		playerBattleship.location = [];
+		checker = [];
+	}
+	frank[0] = frank[0].toUpperCase();
+	if(frank[0] == 'A'){
+			frank[0] = 0;
+		} else if (frank[0] == 'B'){
+			frank[0] = 1;
+		}else if (frank[0] == 'C'){
+			frank[0] = 2;
+		}else if (frank[0] == 'D'){
+			frank[0] = 3;
+		}else if (frank[0] == 'E'){
+			frank[0] = 4;
+		}else if (frank[0] == 'F'){
+			frank[0] = 5;
+		}else if (frank[0] == 'G'){
+			frank[0] = 6;
+		}else if (frank[0] == 'H'){
+			frank[0] = 7;
+		}else if (frank[0] == 'I'){
+			frank[0] = 8;
+		}else if (frank[0] == 'J'){
+			frank[0] = 9;
+		}else{
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;			
+		}
+		
+	if (frank.length == 3 && Number(frank[2]) == 0 && Number(frank[1]) == 1){
+		frank.pop()
+		frank[1]=10;
+	}else if (frank.length == 3  || frank[1] == 0){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+		console.log('hi');
+	}
+	frank[1] = Number(frank[1])-1;
+	
+	let x = frank[0];
+	let y = frank[1];
+	if(important == 'vertical'){
+		
+		if(x >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else{
+			if(playerCruiser.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<4;p++){
+						if(playerCruiser.location[o][0]==[x+p] && playerCruiser.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<4;p++){
+						if(playerCarrier.location[o][0]==[x+p] && playerCarrier.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerSubmarine.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<4;p++){
+						if(playerSubmarine.location[o][0]==[x+p] && playerSubmarine.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+			playerBattleship.direction = 'vertical';
+			for (let i = 0; i < 4; i++){
+				playerBoard[x+i][y] = 1;
+				playerBattleship.location.push([x+i,y]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+
+		}
+	} else if(important == 'horizontal'){
+		if(y >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else {
+			if(playerCruiser.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<4;p++){
+						if(playerCruiser.location[o][0]==[x] && playerCruiser.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<4;p++){
+						if(playerCarrier.location[o][0]==[x] && playerCarrier.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerSubmarine.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<4;p++){
+						if(playerSubmarine.location[o][0]==[x] && playerSubmarine.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+			playerBattleship.direction = 'horizontal';
+
+			for (let i = 0; i<4;i++){
+				playerBoard[x][y+i] = 1;
+				playerBattleship.location.push([x,y+i]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+		}
+		
+	}
+	
+	displayBoard();
+	
+}
+function getCruiserLocation(){
+	let select = document.getElementById('cruiserDirection');
+	let important = select.options[select.selectedIndex].value;
+	let actualImportant = document.getElementById('cruiserLocation').value;
+	let frank = actualImportant.split('',3);
+	if (isNaN(frank[1])){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}
+	let checker = playerCruiser.location;
+	if(checker.length != 0){
+		for(let i = 0; i<3;i++){
+			let c = checker[i][0];
+			let d = checker[i][1];
+			playerBoard[c][d] = 0;
+		}
+		playerCruiser.location = [];
+		checker = [];
+	}
+	frank[0] = frank[0].toUpperCase();
+	if(frank[0] == 'A'){
+			frank[0] = 0;
+		} else if (frank[0] == 'B'){
+			frank[0] = 1;
+		}else if (frank[0] == 'C'){
+			frank[0] = 2;
+		}else if (frank[0] == 'D'){
+			frank[0] = 3;
+		}else if (frank[0] == 'E'){
+			frank[0] = 4;
+		}else if (frank[0] == 'F'){
+			frank[0] = 5;
+		}else if (frank[0] == 'G'){
+			frank[0] = 6;
+		}else if (frank[0] == 'H'){
+			frank[0] = 7;
+		}else if (frank[0] == 'I'){
+			frank[0] = 8;
+		}else if (frank[0] == 'J'){
+			frank[0] = 9;
+		}else{
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;			
+		}
+		
+	if (frank.length == 3 && Number(frank[2]) == 0 && Number(frank[1]) == 1){
+		frank.pop()
+		frank[1]=10;
+	}else if (frank.length == 3  || frank[1] == 0){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+		console.log('hi');
+	}
+	frank[1] = Number(frank[1])-1;
+	
+	let x = frank[0];
+	let y = frank[1];
+	
+	
+	if(important == 'vertical'){
+		
+		if(x >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else{
+			playerCruiser.direction = 'vertical';
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<3;p++){
+						if(playerCarrier.location[o][0]==[x+p] && playerCarrier.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerBattleship.location.length != 0){
+				for(let o = 0; o<4;o++){
+					for(let p = 0; p<3;p++){
+						if(playerCarrier.location[o][0]==[x+p] && playerCarrier.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerSubmarine.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<3;p++){
+						if(playerSubmarine.location[o][0]==[x+p] && playerSubmarine.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+			for (let i = 0; i < 3; i++){
+				playerBoard[x+i][y] = 1;
+				playerCruiser.location.push([x+i,y]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+
+		}
+	} else if(important == 'horizontal'){
+		if(y >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else {
+			playerCruiser.direction = 'horizontal';
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<3;p++){
+						if(playerCarrier.location[o][0]==[x] && playerCarrier.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerBattleship.location.length != 0){
+				for(let o = 0; o<4;o++){
+					for(let p = 0; p<3;p++){
+						if(playerBattleship.location[o][0]==[x] && playerBattleship.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerSubmarine.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<3;p++){
+						if(playerSubmarine.location[o][0]==[x] && playerSubmarine.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+
+			for (let i = 0; i<3;i++){
+				playerBoard[x][y+i] = 1;
+				playerCruiser.location.push([x,y+i]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+		}
+		
+	}
+	
+	displayBoard();
+	
+}
+function getSubmarineLocation(){
+	let select = document.getElementById('submarineDirection');
+	let important = select.options[select.selectedIndex].value;
+	let actualImportant = document.getElementById('submarineLocation').value;
+	let frank = actualImportant.split('',3);
+	if (isNaN(frank[1])){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+	}
+	let checker = playerSubmarine.location;
+	if(checker.length != 0){
+		for(let i = 0; i<3;i++){
+			let c = checker[i][0];
+			let d = checker[i][1];
+			playerBoard[c][d] = 0;
+		}
+		playerSubmarine.location = [];
+		checker = [];
+	}
+	frank[0] = frank[0].toUpperCase();
+	if(frank[0] == 'A'){
+			frank[0] = 0;
+		} else if (frank[0] == 'B'){
+			frank[0] = 1;
+		}else if (frank[0] == 'C'){
+			frank[0] = 2;
+		}else if (frank[0] == 'D'){
+			frank[0] = 3;
+		}else if (frank[0] == 'E'){
+			frank[0] = 4;
+		}else if (frank[0] == 'F'){
+			frank[0] = 5;
+		}else if (frank[0] == 'G'){
+			frank[0] = 6;
+		}else if (frank[0] == 'H'){
+			frank[0] = 7;
+		}else if (frank[0] == 'I'){
+			frank[0] = 8;
+		}else if (frank[0] == 'J'){
+			frank[0] = 9;
+		}else{
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;			
+		}
+		
+	if (frank.length == 3 && Number(frank[2]) == 0 && Number(frank[1]) == 1){
+		frank.pop()
+		frank[1]=10;
+	}else if (frank.length == 3  || frank[1] == 0){
+		document.getElementById('result').innerHTML = 'this is not a valid location'
+		return;
+		console.log('hi');
+	}
+	frank[1] = Number(frank[1])-1;
+	
+	let x = frank[0];
+	let y = frank[1];
+	
+	
+	if(important == 'vertical'){
+		
+		if(x >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else{
+			playerSubmarine.direction = 'vertical';
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<3;p++){
+						if(playerCarrier.location[o][0]==[x+p] && playerCarrier.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerBattleship.location.length != 0){
+				for(let o = 0; o<4;o++){
+					for(let p = 0; p<3;p++){
+						if(playerCruiser.location[o][0]==[x+p] && playerCruiser.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+			if(playerCruiser.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<3;p++){
+						if(playerBattleship.location[o][0]==[x+p] && playerBattleship.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+			
+			for (let i = 0; i < 3; i++){
+				playerBoard[x+i][y] = 1;
+				playerSubmarine.location.push([x+i,y]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+
+		}
+	} else if(important == 'horizontal'){
+		if(y >= 6){
+			document.getElementById('result').innerHTML = 'this is not a valid location'
+			return;
+		}else {
+			playerSubmarine.direction = 'horizontal';
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<3;p++){
+						if(playerCarrier.location[o][0]==[x] && playerCarrier.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerBattleship.location.length != 0){
+				for(let o = 0; o<4;o++){
+					for(let p = 0; p<3;p++){
+						if(playerBattleship.location[o][0]==[x] && playerBattleship.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			if(playerCruiser.location.length != 0){
+				for(let o = 0; o<3;o++){
+					for(let p = 0; p<3;p++){
+						if(playerBattleship.location[o][0]==[x] && playerBattleship.location[o][1]==[y+p]){
+							document.getElementById('result').innerHTML = 'this is not a valid loca tion';
+							return;
+						}
+					}
+				}
+			}
+
+			for (let i = 0; i<3;i++){
+				playerBoard[x][y+i] = 1;
+				playerCruiser.location.push([x,y+i]);
+			}
+			document.getElementById('result').innerHTML = 'placed'
+		}
+		
+	}
+	
+	displayBoard();
+	
+}
+function compareToCarrier(direction,x,y,depth){
+	if(important == 'vertical'){
+			if(playerCarrier.location.length != 0){
+				for(let o = 0; o<5;o++){
+					for(let p = 0; p<depth;p++){
+						if(playerCarrier.location[o][0]==[x+p] && playerCarrier.location[o][1]==[y]){
+							document.getElementById('result').innerHTML = 'this is not a valid location';
+							return;
+						}
+					}
+				}
+			}
+			
+	}
+
+
+}
+
+
+
+
+
+</SCRIPT>
+</HEAD>
+<BODY onload = "main()">
+computer area
+<DIV id="area"></DIV>
+<DIV id="result"></DIV>
+player area
+<DIV id="results"></DIV>
+<INPUT type="text" id="carrierLocation" placeholder="Put Carrier Location Here"/>
+<select name="direction" id="carrierDirection">
+  <option value="vertical">Vertical</option>
+  <option value="horizontal">Horizontal</option>
+</select> <! -- https://www.w3schools.com/tags/tag_select.asp -- >
+
+<BUTTON onClick='getCarrierLocation()' id='action1'>Click To Place Carrier (5 section ship)</BUTTON><BR />
+<INPUT type="text" id="battleshipLocation"  placeholder="Put Battleship Location Here"/>
+<select name="direction" id="battleshipDirection">
+  <option value="vertical">Vertical</option>
+  <option value="horizontal">Horizontal</option>
+</select> 
+<BUTTON onClick='getBattleshipLocation()' id='action2'>Click To Place Battleship (4 sectoion ship)</BUTTON><BR />
+<INPUT type="text" id="cruiserLocation" placeholder="Put Cruiser Location Here"/>
+<select name="direction" id="cruiserDirection">
+  <option value="vertical">Vertical</option>
+  <option value="horizontal">Horizontal</option>
+</select> 
+<BUTTON onClick='getCruiserLocation()' id='action3'>Click To Place Cruiser (3 section ship)</BUTTON><BR />
+<INPUT type="text" id="submarineLocation" placeholder = 'Put Submarine Location Here'/>
+<select name="direction" id="submarineDirection" >
+  <option value="vertical">Vertical</option>
+  <option value="horizontal">Horizontal</option>
+</select> 
+<BUTTON onClick='getSubmarineLocation()' id='action4'>Click To Place Submarine (3 section ship)</BUTTON><BR />
+<INPUT type="text" id="destroyerLocation" />
+<select name="direction" id="destroyerDirection">
+  <option value="vertical">Vertical</option>
+  <option value="horizontal">Horizontal</option>
+</select> 
+<BUTTON onClick='actions()' id='action5'>Click To Place Destroyer (2 section ship)</BUTTON><BR />
+<INPUT type="text" id="box1" />
+<BUTTON onClick='actions()' id='importantAction'>Click To Perform Action</BUTTON><BR />
+
+</BODY>
+</HTML>
